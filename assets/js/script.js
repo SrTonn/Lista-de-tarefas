@@ -25,6 +25,7 @@ function createTask(input = inputTask.value) {
   tasks.appendChild(li)
   clearInput()
   createDeleteButton(li)
+  saveTask()
 }
 
 function clearInput() {
@@ -43,4 +44,30 @@ function createDeleteButton(li) {
 
 function deleteButton(el) {
   el.parentNode.remove()
+  saveTask()
 }
+
+function saveTask() {
+  const liTask = tasks.querySelectorAll('li')
+  const taskList = []
+
+  for (const tasks of liTask) {
+    let taskText = tasks.innerText
+    taskText = taskText.replace(/apagar$/i, '').trim()
+    
+    taskList.push(taskText)
+  }
+
+  const tasksJson = JSON.stringify(taskList)
+  localStorage.setItem('tasks', tasksJson)
+}
+
+function loadTasks() {
+  const tasks = localStorage.getItem('tasks')
+  const taskList = JSON.parse(tasks)
+
+  for (const task of taskList) {
+    createTask(task)
+  }
+}
+loadTasks()
